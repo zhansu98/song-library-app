@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SongService } from '../../services/song.service';
 import { Song } from '../../models/song';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-song-list',
@@ -11,47 +10,44 @@ import { Observable } from 'rxjs';
 })
 export class SongListComponent implements OnInit {
   songs: Song[] = [];
-  filterDate: string = '';
-  sortAttribute: string = 'title';
-  sortDirection: string = 'asc';
+  private sortAttribute: string = 'title';
+  private sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(private songService: SongService) { }
 
   ngOnInit(): void {
+    this.getSongs();
+  }
+
+  getSongs(): void {
     this.songService.getSongs().subscribe(songs => {
       this.songs = songs;
+      this.sortSongs(this.sortAttribute);
     });
   }
 
-  getSongs(): Observable<Song[]> {
-    return this.songService.getSongs();
-  }
+  sortSongs(attribute: string): void {
+    this.sortAttribute = attribute;
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    this.songs.sort((a, b) => {
+      const aValue = a[attribute];
+      const bValue = b[attribute];
 
-  sortSongs(attribute: keyof Song, order: 'asc' | 'desc' = 'asc'): Song[] {
-    return this.songs.slice().sort((a, b) => {
-        const aValue = a[attribute];
-        const bValue = b[attribute];
-
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-            // Sort strings alphabetically
-            return order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-        } else if (typeof aValue === 'number' && typeof bValue === 'number') {
-            // Sort numbers in ascending or descending order
-            return order === 'asc' ? aValue - bValue : bValue - aValue;
-        } else if (aValue instanceof Date && bValue instanceof Date) {
-            // Sort dates in ascending or descending order
-            return order === 'asc' ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
-        } else {
-            // Fallback for unsupported types
-            return 0;
-        }
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return this.sortDirection === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      } else if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return this.sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+      } else if (aValue instanceof Date && bValue instanceof Date) {
+        return this.sortDirection === 'asc' ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
+      } else {
+        return 0;
+      }
     });
-}
+  }
 
   deleteSong(id: number): void {
-    this.songService.deleteSong(id);
-    this.songService.getSongs().subscribe(songs => {
-      this.songs = songs;
-    });
+    // this.songService.deleteSong(id).subscribe(() => {
+    //   this.getSongs();
+    // });
   }
 }
