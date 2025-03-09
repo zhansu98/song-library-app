@@ -1,0 +1,28 @@
+<div class="song-list">
+    <h1>Song Library</h1>
+    <button (click)="getSongs()">Reload Songs</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Artist</th>
+          <th>Release Date</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let song of songs">
+          <td>{{ song.id }}</td>
+          <td>{{ song.title }}</td>
+          <td>{{ song.artist }}</td>
+          <td>{{ song.releaseDate | date:'shortDate' }}</td>
+          <td>{{ song.price | currency }}</td>
+          <td>
+            <!-- <button (click)="deleteSong(song.id)">Delete</button> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
