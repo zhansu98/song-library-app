@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { SongService } from '../../services/song.service';
 import { Song } from '../../models/song';
-import { Observable } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
+import { Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-song-list',
@@ -9,49 +10,63 @@ import { Observable } from 'rxjs';
   styleUrls: ['./song-list.component.css'],
   standalone: false
 })
-export class SongListComponent implements OnInit {
-  songs: Song[] = [];
-  filterDate: string = '';
-  sortAttribute: string = 'title';
+export class SongListComponent implements OnInit{
+  dataSource = new MatTableDataSource<Song>();
+  sortAttribute: keyof Song = 'title';
   sortDirection: string = 'asc';
+  displayedColumns: string[] = ['title', 'artist', 'releaseDate', 'price', 'actions'];
 
   constructor(private songService: SongService) { }
 
   ngOnInit(): void {
+    this.getSongs();
+  }
+
+  getSongs(): void {
     this.songService.getSongs().subscribe(songs => {
-      this.songs = songs;
+      this.dataSource.data = songs;
     });
   }
 
-  getSongs(): Observable<Song[]> {
-    return this.songService.getSongs();
-  }
+  sortData(sort: Sort): void {
+    const data = this.dataSource.data.slice();
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+      return;
+    }
 
-  sortSongs(attribute: keyof Song, order: 'asc' | 'desc' = 'asc'): Song[] {
-    return this.songs.slice().sort((a, b) => {
-        const aValue = a[attribute];
-        const bValue = b[attribute];
-
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-            // Sort strings alphabetically
-            return order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-        } else if (typeof aValue === 'number' && typeof bValue === 'number') {
-            // Sort numbers in ascending or descending order
-            return order === 'asc' ? aValue - bValue : bValue - aValue;
-        } else if (aValue instanceof Date && bValue instanceof Date) {
-            // Sort dates in ascending or descending order
-            return order === 'asc' ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
-        } else {
-            // Fallback for unsupported types
-            return 0;
-        }
+    this.dataSource.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'title':
+          return compare(a.title, b.title, isAsc);
+        case 'artist':
+          return compare(a.artist, b.artist, isAsc);
+        case 'releaseDate':
+          return compare(a.releaseDate, b.releaseDate, isAsc);
+        case 'price':
+          return compare(a.price, b.price, isAsc);
+        default:
+          return 0;
+      }
     });
-}
+  }
 
   deleteSong(id: number): void {
-    this.songService.deleteSong(id);
-    this.songService.getSongs().subscribe(songs => {
-      this.songs = songs;
-    });
+    // this.songService.deleteSong(id).subscribe(() => {
+    //   this.getSongs();
+    // });
+  }
+}
+
+function compare(a: string | number | Date, b: string | number | Date, isAsc: boolean): number {
+  if (a instanceof Date && b instanceof Date) {
+    return (a.getTime() - b.getTime()) * (isAsc ? 1 : -1);
+  } else if (typeof a === 'number' && typeof b === 'number') {
+    return (a - b) * (isAsc ? 1 : -1);
+  } else if (typeof a === 'string' && typeof b === 'string') {
+    return a.localeCompare(b) * (isAsc ? 1 : -1);
+  } else {
+    return 0;
   }
 }

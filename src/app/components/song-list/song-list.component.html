@@ -1,28 +1,42 @@
 <div class="song-list">
-    <h1>Song Library</h1>
-    <button (click)="getSongs()">Reload Songs</button>
-    <table>
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Title</th>
-          <th>Artist</th>
-          <th>Release Date</th>
-          <th>Price</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let song of songs">
-          <td>{{ song.id }}</td>
-          <td>{{ song.title }}</td>
-          <td>{{ song.artist }}</td>
-          <td>{{ song.releaseDate | date:'shortDate' }}</td>
-          <td>{{ song.price | currency }}</td>
-          <td>
-            <!-- <button (click)="deleteSong(song.id)">Delete</button> -->
-          </td>
-        </tr>
-      </tbody>
+  <mat-card>
+    <mat-toolbar color="primary">
+      <span>Song Library</span>
+      <span class="spacer"></span>
+      <button mat-raised-button color="accent" (click)="getSongs()">Reload Songs</button>
+    </mat-toolbar>
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="mat-elevation-z8">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+        <td mat-cell *matCellDef="let song">{{ song.title }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="artist">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Artist</th>
+        <td mat-cell *matCellDef="let song">{{ song.artist }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="releaseDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Release Date</th>
+        <td mat-cell *matCellDef="let song">{{ song.releaseDate | date:'shortDate' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+        <td mat-cell *matCellDef="let song">{{ song.price | currency }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let song">
+          <button mat-icon-button color="warn" (click)="deleteSong(song.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-  </div>
+  </mat-card>
+</div>
