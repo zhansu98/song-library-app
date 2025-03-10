@@ -14,6 +14,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -25,20 +29,26 @@ import { FormsModule } from '@angular/forms';
     RouterOutlet,
     BrowserModule,
     BrowserAnimationsModule,
-    //Materials
     FormsModule,
+    //Materials
     MatButtonModule,
     MatTableModule,
     MatSortModule,
     MatIconModule,
     MatToolbarModule,
-    MatCardModule
+    MatCardModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
+    FormsModule,
+    MatInputModule
 ],
 providers: [
   SongService,
   MockBackendService,
   CurrencyPipe,
   DatePipe,
+  provideNativeDateAdapter()
 ],
   bootstrap: [AppComponent]
 })

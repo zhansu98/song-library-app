@@ -15,6 +15,8 @@ export class SongListComponent implements OnInit{
   sortAttribute: keyof Song = 'title';
   sortDirection: string = 'asc';
   displayedColumns: string[] = ['title', 'artist', 'releaseDate', 'price', 'actions'];
+  startDate: Date | null = null;
+  endDate: Date | null = null;
 
   constructor(private songService: SongService) { }
 
@@ -56,6 +58,10 @@ export class SongListComponent implements OnInit{
     // this.songService.deleteSong(id).subscribe(() => {
     //   this.getSongs();
     // });
+  }
+
+  applyDateFilter(): void { 
+    
   }
 }
 
