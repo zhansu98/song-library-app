@@ -1,17 +1,4 @@
-<mat-drawer-container class="example-container" autosize>
-    <mat-drawer #drawer class="example-sidenav" mode="side">
-        <app-song-browser></app-song-browser>
-</mat-drawer>
-
-<mat-drawer-content>
-    <mat-toolbar color="primary">
-        <button mat-icon-button (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <span>Song Library</span>
-    </mat-toolbar>
-
-    <app-song-list></app-song-list>
-    <router-outlet></router-outlet>
+<app-song-list></app-song-list>
+<router-outlet></router-outlet>
 
 <router-outlet />
