@@ -74,7 +74,17 @@ export class SongListComponent implements OnInit {
 
   openAddDialog(): void {
     this.dialog
-      .open(AddSongDialogComponent)
+      .open(AddSongDialogComponent, {
+        data: {
+          song: {
+            id: -1,
+            title: '',
+            artist: '',
+            releaseDate: new Date(),
+            price: 0,
+          },
+        },
+      })
       .afterClosed()
       .subscribe({
         next: (song: Song) => {
@@ -89,16 +99,14 @@ export class SongListComponent implements OnInit {
   }
 
   addSong(song: Song): void {
-    console.log('song: ' + song);
-    // this.songService.addSong(song).subscribe({
-    //   next: () => {
-    //     this.getSongs();
-    //     this.dataSource.data.push(song);
-    //   },
-    //   error: (err) => {
-    //     console.error('Error adding song:', err);
-    //   }
-    // });
+    this.songService.addSong(song).subscribe({
+      next: () => {
+        this.getSongs();
+      },
+      error: (err) => {
+        console.error('Error adding song:', err);
+      },
+    });
   }
 
   deleteSong(id: number): void {
