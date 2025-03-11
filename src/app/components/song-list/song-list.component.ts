@@ -111,12 +111,14 @@ export class SongListComponent implements OnInit {
 
   deleteSong(id: number): void {
     console.log('song id: ' + id);
-    this.dataSource.data = this.dataSource.data.filter(
-      (song) => song.id !== id
-    );
-    // this.songService.deleteSong(id).subscribe(() => {
-    //   this.getSongs();
-    // });
+    this.songService.deleteSong(id).subscribe({
+      next: () => {
+        this.getSongs();
+      },
+      error: (err) => {
+        console.error('Error deleting song:', err);
+      },
+    });
   }
 
   applyDateFilter(): void {
