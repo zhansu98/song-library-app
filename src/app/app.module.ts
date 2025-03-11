@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import {MatDialogModule} from '@angular/material/dialog';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { AppComponent } from './app.component';
 import { RouterOutlet } from '@angular/router';
@@ -15,14 +16,19 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { SongBrowserComponent } from './components/song-browser/song-browser.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { AddSongDialogComponent } from './components/add-song-dialog/add-song-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SongListComponent
+    SongListComponent,
+    SongBrowserComponent,
+    AddSongDialogComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +47,9 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatNativeDateModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatSidenavModule,
+    MatDialogModule
 ],
 providers: [
   SongService,

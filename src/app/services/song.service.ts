@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Song } from '../models/song';
-import { of, Observable } from 'rxjs';
+import { of, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,11 @@ export class SongService {
     return of(this.songs);
   }
 
-  addSong(song: Song): void {
-    this.songs.push(song);
+  addSong(song: Song): Observable<Song> {
+    // Simulate an API call
+    return of(song).pipe(
+      tap(newSong => this.songs.push(newSong))
+    );
   }
 
   deleteSong(id: number): void {
