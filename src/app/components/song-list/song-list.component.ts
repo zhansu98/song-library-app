@@ -10,7 +10,8 @@ import { Song } from '../../models/song';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { AddSongDialogComponent } from '../add-song-dialog/add-song-dialog.component';
+import { AddSongDialogComponent } from '../add-song-dialog/add-edit-song-dialog.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-song-list',
@@ -110,13 +111,22 @@ export class SongListComponent implements OnInit {
   }
 
   deleteSong(id: number): void {
-    console.log('song id: ' + id);
-    this.dataSource.data = this.dataSource.data.filter(
-      (song) => song.id !== id
-    );
-    // this.songService.deleteSong(id).subscribe(() => {
-    //   this.getSongs();
-    // });
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { message: 'Are you sure you want to delete this song?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.songService.deleteSong(id).subscribe({
+          next: () => {
+            this.getSongs();
+          },
+          error: (err) => {
+            console.error('Error deleting song:', err);
+          },
+        });
+      }
+    });
   }
 
   applyDateFilter(): void {

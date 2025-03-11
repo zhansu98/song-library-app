@@ -9,38 +9,73 @@ export class SongService {
   private songs: Song[] = [
     {
       id: 1,
-      title: 'Song 1',
-      artist: 'Artist 1',
-      releaseDate: new Date('2025-01-01'),
-      price: 10,
+      title: 'Bohemian Rhapsody',
+      artist: 'Queen',
+      releaseDate: new Date('1975-10-31'),
+      price: 1.29,
     },
     {
       id: 2,
-      title: 'Song 2',
-      artist: 'Artist 2',
-      releaseDate: new Date('2025-02-01'),
-      price: 20,
+      title: 'Hotel California',
+      artist: 'Eagles',
+      releaseDate: new Date('1977-02-26'),
+      price: 1.49,
     },
     {
       id: 3,
-      title: 'Song 3',
-      artist: 'Artist 3',
-      releaseDate: new Date('2025-03-01'),
-      price: 30,
+      title: 'Smells Like Teen Spirit',
+      artist: 'Nirvana',
+      releaseDate: new Date('1991-09-10'),
+      price: 1.19,
     },
     {
       id: 4,
-      title: 'Song 4',
-      artist: 'Artist 4',
-      releaseDate: new Date('2025-04-01'),
-      price: 40,
+      title: 'Rolling in the Deep',
+      artist: 'Adele',
+      releaseDate: new Date('2010-11-29'),
+      price: 1.39,
     },
     {
       id: 5,
-      title: 'Song 5',
-      artist: 'Artist 5',
-      releaseDate: new Date('2025-05-01'),
-      price: 50,
+      title: 'Shape of You',
+      artist: 'Ed Sheeran',
+      releaseDate: new Date('2017-01-06'),
+      price: 1.59,
+    },
+    {
+      id: 6,
+      title: 'Uptown Funk',
+      artist: 'Mark Ronson ft. Bruno Mars',
+      releaseDate: new Date('2014-11-10'),
+      price: 1.49,
+    },
+    {
+      id: 7,
+      title: 'Billie Jean',
+      artist: 'Michael Jackson',
+      releaseDate: new Date('1983-01-02'),
+      price: 1.29,
+    },
+    {
+      id: 8,
+      title: 'Stairway to Heaven',
+      artist: 'Led Zeppelin',
+      releaseDate: new Date('1971-11-08'),
+      price: 1.69,
+    },
+    {
+      id: 9,
+      title: 'Blinding Lights',
+      artist: 'The Weeknd',
+      releaseDate: new Date('2019-11-29'),
+      price: 1.49,
+    },
+    {
+      id: 10,
+      title: 'Hey Jude',
+      artist: 'The Beatles',
+      releaseDate: new Date('1968-08-26'),
+      price: 1.19,
     },
   ];
 
@@ -60,8 +95,13 @@ export class SongService {
     );
   }
 
-  deleteSong(id: number): void {
-    this.songs = this.songs.filter((song) => song.id !== id);
+  deleteSong(id: number): Observable<number> {
+    // Simulate an API call
+    return of(id).pipe(
+      tap(() => {
+        this.songs = this.songs.filter((song) => song.id !== id);
+      })
+    );
   }
 
   updateSong(updatedSong: Song): void {

@@ -22,10 +22,16 @@ import {
 } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { AddSongDialogComponent } from './components/add-song-dialog/add-song-dialog.component';
+import { AddSongDialogComponent } from './components/add-song-dialog/add-edit-song-dialog.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, SongListComponent, AddSongDialogComponent],
+  declarations: [
+    AppComponent,
+    SongListComponent,
+    AddSongDialogComponent,
+    ConfirmationDialogComponent,
+  ],
   imports: [
     CommonModule,
     RouterOutlet,
