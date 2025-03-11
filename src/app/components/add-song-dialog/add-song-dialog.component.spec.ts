@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SongFilterComponent } from './song-filter.component';
+import { AddSongDialogComponent } from './add-song-dialog.component';
 
-describe('SongFilterComponent', () => {
-  let component: SongFilterComponent;
-  let fixture: ComponentFixture<SongFilterComponent>;
+describe('AddSongDialogComponent', () => {
+  let component: AddSongDialogComponent;
+  let fixture: ComponentFixture<AddSongDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SongFilterComponent]
+      imports: [AddSongDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SongFilterComponent);
+    fixture = TestBed.createComponent(AddSongDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

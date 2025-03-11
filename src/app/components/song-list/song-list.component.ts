@@ -1,25 +1,41 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { SongService } from '../../services/song.service';
 import { Song } from '../../models/song';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { AddSongDialogComponent } from '../add-song-dialog/add-song-dialog.component';
 
 @Component({
   selector: 'app-song-list',
   templateUrl: './song-list.component.html',
   styleUrls: ['./song-list.component.css'],
-  standalone: false
+  standalone: false,
 })
-export class SongListComponent implements OnInit{
+export class SongListComponent implements OnInit {
   dataSource = new MatTableDataSource<Song>();
   sortAttribute: keyof Song = 'title';
   sortDirection: string = 'asc';
-  displayedColumns: string[] = ['title', 'artist', 'releaseDate', 'price', 'actions'];
+  displayedColumns: string[] = [
+    'title',
+    'artist',
+    'releaseDate',
+    'price',
+    'actions',
+  ];
   startDate: Date | null = null;
   endDate: Date | null = null;
   fullSongList: Song[] = [];
 
-  constructor(private songService: SongService) { }
+  readonly dialog = inject(MatDialog);
+
+  constructor(private songService: SongService) {}
 
   ngOnInit(): void {
     this.getSongs();
@@ -27,13 +43,12 @@ export class SongListComponent implements OnInit{
   }
 
   getSongs(): void {
-    this.songService.getSongs().subscribe(songs => {
+    this.songService.getSongs().subscribe((songs) => {
       this.dataSource.data = songs;
     });
   }
 
   sortData(sort: Sort): void {
-
     const data = this.dataSource.data.slice();
     if (!sort.active || sort.direction === '') {
       this.dataSource.data = data;
@@ -57,16 +72,59 @@ export class SongListComponent implements OnInit{
     });
   }
 
+  openAddDialog(): void {
+    this.dialog
+      .open(AddSongDialogComponent, {
+        data: {
+          song: {
+            id: -1,
+            title: '',
+            artist: '',
+            releaseDate: new Date(),
+            price: 0,
+          },
+        },
+      })
+      .afterClosed()
+      .subscribe({
+        next: (song: Song) => {
+          if (song) {
+            this.addSong(song);
+          }
+        },
+        error: (err) => {
+          console.error('Error opening add song dialog:', err);
+        },
+      });
+  }
+
+  addSong(song: Song): void {
+    this.songService.addSong(song).subscribe({
+      next: () => {
+        this.getSongs();
+      },
+      error: (err) => {
+        console.error('Error adding song:', err);
+      },
+    });
+  }
+
   deleteSong(id: number): void {
+    console.log('song id: ' + id);
+    this.dataSource.data = this.dataSource.data.filter(
+      (song) => song.id !== id
+    );
     // this.songService.deleteSong(id).subscribe(() => {
     //   this.getSongs();
     // });
   }
 
-  applyDateFilter(): void { 
-    this.dataSource.data = this.fullSongList.filter(song => {
+  applyDateFilter(): void {
+    this.dataSource.data = this.fullSongList.filter((song) => {
       if (this.startDate && this.endDate) {
-        return song.releaseDate >= this.startDate && song.releaseDate <= this.endDate;
+        return (
+          song.releaseDate >= this.startDate && song.releaseDate <= this.endDate
+        );
       } else if (this.startDate) {
         return song.releaseDate >= this.startDate;
       } else if (this.endDate) {
@@ -78,7 +136,11 @@ export class SongListComponent implements OnInit{
   }
 }
 
-function compare(a: string | number | Date, b: string | number | Date, isAsc: boolean): number {
+function compare(
+  a: string | number | Date,
+  b: string | number | Date,
+  isAsc: boolean
+): number {
   if (a instanceof Date && b instanceof Date) {
     return (a.getTime() - b.getTime()) * (isAsc ? 1 : -1);
   } else if (typeof a === 'number' && typeof b === 'number') {

@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Dialog with elements</h2>
+<mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <mat-label>Song Title</mat-label>
+    <input matInput [(ngModel)]="songTitle" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Artist</mat-label>
+    <input matInput [(ngModel)]="songArtist" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Release Date</mat-label>
+    <input matInput [matDatepicker]="releaseDatePicker" [(ngModel)]="songReleaseDate" />
+    <mat-datepicker-toggle matSuffix [for]="releaseDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #releaseDatePicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Price</mat-label>
+    <input matInput [(ngModel)]="songPrice" type="number" min="0" step="0.01" />
+    <span matPrefix>$&nbsp;</span>
+  </mat-form-field>
+</mat-dialog-content>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="onSubmit()" cdkFocusInitial>Add</button>
+</div>
