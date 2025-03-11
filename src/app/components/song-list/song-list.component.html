@@ -10,19 +10,17 @@
         <div class="date-range-filter">
           <mat-form-field appearance="fill">
             <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="startDate">
+            <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="startDate" (dateChange)="applyDateFilter()">
             <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #startDatePicker></mat-datepicker>
           </mat-form-field>
     
           <mat-form-field appearance="fill">
             <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="endDate">
+            <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="endDate"(dateChange)="applyDateFilter()">
             <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #endDatePicker></mat-datepicker>
           </mat-form-field>
-    
-          <button mat-raised-button color="primary" (click)="applyDateFilter()">Apply Filter</button>
         </div>
 
     <!-- Song List Section -->

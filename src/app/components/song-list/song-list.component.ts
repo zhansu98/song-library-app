@@ -17,11 +17,13 @@ export class SongListComponent implements OnInit{
   displayedColumns: string[] = ['title', 'artist', 'releaseDate', 'price', 'actions'];
   startDate: Date | null = null;
   endDate: Date | null = null;
+  fullSongList: Song[] = [];
 
   constructor(private songService: SongService) { }
 
   ngOnInit(): void {
     this.getSongs();
+    this.fullSongList = this.dataSource.data;
   }
 
   getSongs(): void {
@@ -31,6 +33,7 @@ export class SongListComponent implements OnInit{
   }
 
   sortData(sort: Sort): void {
+
     const data = this.dataSource.data.slice();
     if (!sort.active || sort.direction === '') {
       this.dataSource.data = data;
@@ -61,7 +64,17 @@ export class SongListComponent implements OnInit{
   }
 
   applyDateFilter(): void { 
-    
+    this.dataSource.data = this.fullSongList.filter(song => {
+      if (this.startDate && this.endDate) {
+        return song.releaseDate >= this.startDate && song.releaseDate <= this.endDate;
+      } else if (this.startDate) {
+        return song.releaseDate >= this.startDate;
+      } else if (this.endDate) {
+        return song.releaseDate <= this.endDate;
+      } else {
+        return true;
+      }
+    });
   }
 }
 
