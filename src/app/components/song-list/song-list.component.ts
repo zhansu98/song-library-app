@@ -1,16 +1,10 @@
-import {
-  AfterViewInit,
-  Component,
-  inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SongService } from '../../services/song.service';
 import { Song } from '../../models/song';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { AddSongDialogComponent } from '../add-song-dialog/add-edit-song-dialog.component';
+import { AddEditSongDialogComponent } from '../add-song-dialog/add-edit-song-dialog.component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -49,6 +43,43 @@ export class SongListComponent implements OnInit {
     });
   }
 
+  openEditDialog(song: Song): void {
+    this.dialog
+      .open(AddEditSongDialogComponent, {
+        data: {
+          song: {
+            id: song.id,
+            title: song.title,
+            artist: song.artist,
+            releaseDate: song.releaseDate,
+            price: song.price,
+          },
+        },
+      })
+      .afterClosed()
+      .subscribe({
+        next: (result: any) => {
+          if (result) {
+            this.updateSong(result);
+          }
+        },
+        error: (err) => {
+          console.error('Error opening add song dialog:', err);
+        },
+      });
+  }
+
+  updateSong(song: Song): void {
+    this.songService.updateSong(song).subscribe({
+      next: () => {
+        this.getSongs();
+      },
+      error: (err) => {
+        console.error('Error updating song:', err);
+      },
+    });
+  }
+
   sortData(sort: Sort): void {
     const data = this.dataSource.data.slice();
     if (!sort.active || sort.direction === '') {
@@ -75,7 +106,7 @@ export class SongListComponent implements OnInit {
 
   openAddDialog(): void {
     this.dialog
-      .open(AddSongDialogComponent, {
+      .open(AddEditSongDialogComponent, {
         data: {
           song: {
             id: -1,

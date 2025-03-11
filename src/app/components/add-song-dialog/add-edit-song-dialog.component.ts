@@ -12,8 +12,8 @@ export interface addSongDialogData {
   styleUrl: './add-song-dialog.component.css',
   standalone: false,
 })
-export class AddSongDialogComponent {
-  readonly dialogRef = inject(MatDialogRef<AddSongDialogComponent>);
+export class AddEditSongDialogComponent {
+  readonly dialogRef = inject(MatDialogRef<AddEditSongDialogComponent>);
   readonly data = inject<addSongDialogData>(MAT_DIALOG_DATA);
 
   songTitle: string = this.data.song.title;

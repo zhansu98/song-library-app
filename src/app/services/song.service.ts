@@ -104,10 +104,15 @@ export class SongService {
     );
   }
 
-  updateSong(updatedSong: Song): void {
-    const index = this.songs.findIndex((song) => song.id === updatedSong.id);
-    if (index !== -1) {
-      this.songs[index] = updatedSong;
-    }
+  updateSong(updatedSong: Song): Observable<Song> {
+    // Simulate an API call
+    return of(updatedSong).pipe(
+      tap((song) => {
+        const index = this.songs.findIndex((s) => s.id === song.id);
+        if (index !== -1) {
+          this.songs[index] = song;
+        }
+      })
+    );
   }
 }
