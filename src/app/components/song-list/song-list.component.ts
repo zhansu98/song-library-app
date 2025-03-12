@@ -109,7 +109,6 @@ export class SongListComponent implements OnInit {
       .open(AddEditSongDialogComponent, {
         data: {
           song: {
-            id: -1,
             title: '',
             artist: '',
             releaseDate: new Date(),

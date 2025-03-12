@@ -13,7 +13,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AddEditSongDialogComponent } from './components/add-song-dialog/add-edit-song-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -52,8 +53,15 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     MatInputModule,
     MatSidenavModule,
     MatDialogModule,
+    ReactiveFormsModule,
   ],
-  providers: [SongService, CurrencyPipe, DatePipe, provideNativeDateAdapter()],
+  providers: [
+    SongService,
+    CurrencyPipe,
+    DatePipe,
+    provideNativeDateAdapter(),
+    provideHttpClient(),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
