@@ -63,7 +63,8 @@
               "buildTarget": "song-library-app:build:production"
             },
             "development": {
-              "buildTarget": "song-library-app:build:development"
+              "buildTarget": "song-library-app:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development",

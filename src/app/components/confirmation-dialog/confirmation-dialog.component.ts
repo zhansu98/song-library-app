@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { AfterContentChecked, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,10 +8,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   standalone: false,
 })
 export class ConfirmationDialogComponent {
+  isNotification: boolean;
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public message: { message: string }
-  ) {}
+    @Inject(MAT_DIALOG_DATA)
+    public message: { title: string; message: string; notification: boolean }
+  ) {
+    this.isNotification = message.notification;
+  }
 
   onNoClick(): void {
     this.dialogRef.close(false);

@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddEditSongDialogComponent } from '../add-song-dialog/add-edit-song-dialog.component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { of } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-song-list',
@@ -38,48 +39,100 @@ export class SongListComponent implements OnInit {
     this.fullSongList = this.dataSource.data;
   }
 
+  /**
+   * Section for CRUD operations
+   */
+
   getSongs(): void {
-    this.songService.getSongs().subscribe((songs) => {
-      this.dataSource.data = songs;
+    this.songService.getSongs().subscribe({
+      next: (songs) => {
+        this.dataSource.data = songs;
+        this.fullSongList = songs;
+      },
+      error: (err) => {
+        this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: 'Error fetching songs, please try again!',
+            notification: true,
+          },
+        });
+        console.error('Error fetching songs:', err);
+      },
     });
   }
 
-  openEditDialog(song: Song): void {
-    this.dialog
-      .open(AddEditSongDialogComponent, {
-        data: {
-          song: {
-            id: song.id,
-            title: song.title,
-            artist: song.artist,
-            releaseDate: song.releaseDate,
-            price: song.price,
+  addSong(song: Song): void {
+    this.songService.addSong(song).subscribe({
+      next: () => {
+        this.getSongs();
+      },
+      error: (err) => {
+        this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            title: 'Add Song Error',
+            message: 'Server error when adding song, please try again!',
+            notification: true,
           },
-        },
-      })
-      .afterClosed()
-      .subscribe({
-        next: (result: any) => {
-          if (result) {
-            this.updateSong(result);
-          }
-        },
-        error: (err) => {
-          console.error('Error opening add song dialog:', err);
-        },
-      });
+        });
+        console.error('Error adding song:', err);
+      },
+    });
+  }
+
+  deleteSong(id: number): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: { message: 'Are you sure you want to delete this song?' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.songService.deleteSong(id).subscribe({
+          next: () => {
+            this.getSongs();
+          },
+          error: (err) => {
+            this.dialog.open(ConfirmationDialogComponent, {
+              data: {
+                title: 'Error Deleting Song',
+                message: 'Server error when deleting song, please try again!',
+                notification: true,
+              },
+            });
+            console.error('Error deleting song:', err);
+          },
+        });
+      }
+    });
   }
 
   updateSong(song: Song): void {
     this.songService.updateSong(song).subscribe({
       next: () => {
         this.getSongs();
+        this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            title: 'Update',
+            message: 'Update Successful!',
+            notification: true,
+          },
+        });
       },
       error: (err) => {
+        this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            title: 'Update Error',
+            message: 'Server error when trying to update, please try again!',
+            notification: true,
+          },
+        });
         console.error('Error updating song:', err);
       },
     });
   }
+
+  /**
+   * Section for sorting and filtering
+   */
 
   sortData(sort: Sort): void {
     const data = this.dataSource.data.slice();
@@ -105,10 +158,61 @@ export class SongListComponent implements OnInit {
     });
   }
 
+  applyDateFilter(): void {
+    this.dataSource.data = this.fullSongList.slice().filter((song) => {
+      if (this.startDate && this.endDate) {
+        return (
+          new Date(song.releaseDate) >= this.startDate &&
+          new Date(song.releaseDate) <= this.endDate
+        );
+      } else if (this.startDate) {
+        return new Date(song.releaseDate) >= this.startDate;
+      } else if (this.endDate) {
+        return new Date(song.releaseDate) <= this.endDate;
+      } else {
+        return true;
+      }
+    });
+  }
+
+  /**
+   * Section for dialog operations
+   */
+
+  openEditDialog(song: Song): void {
+    this.dialog
+      .open(AddEditSongDialogComponent, {
+        data: {
+          title: 'Edit Song Details',
+          message: 'Edit the details of the song below:',
+          song: {
+            id: song.id,
+            title: song.title,
+            artist: song.artist,
+            releaseDate: song.releaseDate,
+            price: song.price,
+          },
+        },
+      })
+      .afterClosed()
+      .subscribe({
+        next: (result: any) => {
+          if (result) {
+            this.updateSong(result);
+          }
+        },
+        error: (err) => {
+          console.error('Error opening add song dialog:', err);
+        },
+      });
+  }
+
   openAddDialog(): void {
     this.dialog
       .open(AddEditSongDialogComponent, {
         data: {
+          title: 'Enter New Song Details',
+          message: 'Add the details of the new song below:',
           song: {
             title: '',
             artist: '',
@@ -128,52 +232,6 @@ export class SongListComponent implements OnInit {
           console.error('Error opening add song dialog:', err);
         },
       });
-  }
-
-  addSong(song: Song): void {
-    this.songService.addSong(song).subscribe({
-      next: () => {
-        this.getSongs();
-      },
-      error: (err) => {
-        console.error('Error adding song:', err);
-      },
-    });
-  }
-
-  deleteSong(id: number): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: { message: 'Are you sure you want to delete this song?' },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.songService.deleteSong(id).subscribe({
-          next: () => {
-            this.getSongs();
-          },
-          error: (err) => {
-            console.error('Error deleting song:', err);
-          },
-        });
-      }
-    });
-  }
-
-  applyDateFilter(): void {
-    this.dataSource.data = this.fullSongList.filter((song) => {
-      if (this.startDate && this.endDate) {
-        return (
-          song.releaseDate >= this.startDate && song.releaseDate <= this.endDate
-        );
-      } else if (this.startDate) {
-        return song.releaseDate >= this.startDate;
-      } else if (this.endDate) {
-        return song.releaseDate <= this.endDate;
-      } else {
-        return true;
-      }
-    });
   }
 }
 

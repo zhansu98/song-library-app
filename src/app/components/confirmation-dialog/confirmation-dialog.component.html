@@ -1,8 +1,9 @@
-<h2 mat-dialog-title>Confirmation</h2>
+<h2 mat-dialog-title>{{ message.title || 'Confirmation' }}</h2>
 <mat-dialog-content>
   <p>{{ message.message }}</p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No</button>
-  <button mat-button (click)="onYesClick()">Yes</button>
+  <button *ngIf="!isNotification" mat-button (click)="onNoClick()">No</button>
+  <button *ngIf="!isNotification" mat-button (click)="onYesClick()">Yes</button>
+  <button *ngIf="isNotification" mat-button (click)="onNoClick()">Ok</button>
 </mat-dialog-actions>

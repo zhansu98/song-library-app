@@ -102,12 +102,15 @@ describe('SongService', () => {
       releaseDate: new Date('2021-03-01'),
       price: 3.99,
     };
+    const errorMessage =
+      'Http failure response for /api/songs: 500 Server Error';
 
     service.addSong(newSong).subscribe({
-      next: (song) => {
-        expect(song).toEqual(newSong);
+      next: () => fail('Expected an error, not the new song'),
+      error: (error) => {
+        expect(error).toBeTruthy();
+        expect(error.message).toBe(errorMessage);
       },
-      error: () => fail('Expected the song to be added, not an error'),
     });
 
     const req = httpMock.expectOne(service.apiUrl);
@@ -132,12 +135,15 @@ describe('SongService', () => {
 
   it('should handle error when deleting a song', () => {
     const songId = 1;
+    const errorMessage =
+      'Http failure response for /api/songs/1: 500 Server Error';
 
     service.deleteSong(songId).subscribe({
-      next: (id) => {
-        expect(id).toBe(songId);
+      next: () => fail('Expected an error, not song id'),
+      error: (error) => {
+        expect(error).toBeTruthy();
+        expect(error.message).toBe(errorMessage);
       },
-      error: () => fail('Expected the song to be deleted, not an error'),
     });
 
     const req = httpMock.expectOne(`${service.apiUrl}/${songId}`);
@@ -174,12 +180,15 @@ describe('SongService', () => {
       releaseDate: new Date('2021-04-01'),
       price: 4.99,
     };
+    const errorMessage =
+      'Http failure response for /api/songs/1: 500 Server Error';
 
     service.updateSong(updatedSong).subscribe({
-      next: (song) => {
-        expect(song).toEqual(updatedSong);
+      next: () => fail('Expected an error, not the updated song'),
+      error: (error) => {
+        expect(error).toBeTruthy();
+        expect(error.message).toBe(errorMessage);
       },
-      error: () => fail('Expected the song to be updated, not an error'),
     });
 
     const req = httpMock.expectOne(`${service.apiUrl}/${updatedSong.id}`);
