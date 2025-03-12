@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Song } from '../models/song';
-import { of, Observable, tap, catchError } from 'rxjs';
+import { of, Observable, tap, catchError, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class SongService {
     return this.http.get<Song[]>(this.apiUrl).pipe(
       catchError((error: any) => {
         console.error('Error fetching songs:', error);
-        return of([]);
+        return throwError(() => error);
       })
     );
   }

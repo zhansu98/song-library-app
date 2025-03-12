@@ -42,4 +42,22 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app.title).toEqual('song-library-app');
   });
+
+  it('should have a SongListComponent', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-song-list')).not.toBeNull();
+  });
+
+  it('should have a toolbar', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('mat-toolbar')).not.toBeNull();
+  });
+
+  it('should have a card', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('mat-card')).not.toBeNull();
+  });
 });
