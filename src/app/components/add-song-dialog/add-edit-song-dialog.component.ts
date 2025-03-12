@@ -27,7 +27,6 @@ export class AddEditSongDialogComponent {
 
   onSubmit(): void {
     const updatedSong: Song = {
-      id: this.data.song.id,
       title: this.songTitle,
       artist: this.songArtist,
       releaseDate: this.songReleaseDate,

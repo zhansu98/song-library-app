@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AddEditSongDialogComponent } from './components/add-song-dialog/add-edit-song-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,13 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     MatSidenavModule,
     MatDialogModule,
   ],
-  providers: [SongService, CurrencyPipe, DatePipe, provideNativeDateAdapter()],
+  providers: [
+    SongService,
+    CurrencyPipe,
+    DatePipe,
+    provideNativeDateAdapter(),
+    provideHttpClient(),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
