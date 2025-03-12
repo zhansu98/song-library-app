@@ -34,12 +34,28 @@ export class SongService {
   }
 
   deleteSong(id: number): Observable<number> {
-    // Simulate an API call
-    return of(id).pipe();
+    return this.http.delete<number>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => {
+        console.log(`Deleted song with id: ${id}`);
+      }),
+      catchError((error: any) => {
+        console.error('Error deleting song:', error);
+        return of(id);
+      })
+    );
   }
 
   updateSong(updatedSong: Song): Observable<Song> {
-    // Simulate an API call
-    return of(updatedSong).pipe();
+    return this.http
+      .put<Song>(`${this.apiUrl}/${updatedSong.id}`, updatedSong)
+      .pipe(
+        tap((song) => {
+          console.log('Updated song:', JSON.stringify(song));
+        }),
+        catchError((error: any) => {
+          console.error('Error updating song:', error);
+          return of(updatedSong);
+        })
+      );
   }
 }
