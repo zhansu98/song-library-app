@@ -5,11 +5,14 @@
 # How to run the project
  ### Backend (Should be running first before the frontend):
 - Built in Java 23 and is a simple h2 database with a basic java spring boot service for communication.
+- A snapshot jar file (backend-0.0.1-SNAPSHOT.jar) is uploaded to the frontend and backend repo.
+- This jar file can be used with ```java -jar backend-0.0.1-SNAPSHOT.jar``` from terminal and the backend should spin up on localhost:8080
+- Alternatively:
 - Clone source code.
 - From terminal, start with ```mvn spring-boot:run```.
 - This will run the server on localhost:8080.
 - Alternatively, you can run mvn clean package which will create a jar file in the targets folder.
-   - From terminal, enter ```java -jar target/backend-0.0.1-SNAPSHOT.jar```
+- From terminal, enter ```java -jar target/backend-0.0.1-SNAPSHOT.jar```
 - Note the name of the jar may be different so be sure to check the name in the target folder once created.
 
 ### Frontend:
@@ -27,7 +30,7 @@ server. If you choose to hard-code the song data, consider structuring your code
 way you would retrieve data from a server.**
 - When the back end boots up it will always populated with the same 5 sample songs to start with.
 
-**The song list should be filterable by release date and sortable by any attribute of the song. 
+**The song list should be filterable by release date and sortable by any attribute of the song.
 The user should be able to add a new song to the list, delete a song from the list, and edit any song in the list.
 When the user updates the list, those changes should be reflected on the website. You may persist the
 changes on a server, but that is not required.**
