@@ -1,17 +1,73 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-@import "./app/themes/materialtheme.css";
 
-// html {
-//   @include mat.theme((
-//     color: (
-//       theme-type: light,
-//       primary: mat.$azure-palette,
-//       tertiary: mat.$blue-palette,
-//     ),
-//     typography: Roboto,
-//     density: 0,
-//   ));
-// }
+@include mat.core();
+
+// Custom primary palette
+$custom-primary-palette: (
+  50: #e3e5ea,
+  100: #b9bed0,
+  200: #8b93b3,
+  300: #5d6896,
+  400: #3a477f,
+  500: #1B2844,
+  600: #18243d,
+  700: #141e35,
+  800: #10182d,
+  900: #080f1f,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+// Custom secondary palette
+$custom-secondary-palette: (
+  50: #e2f3e7,
+  100: #b6e1c4,
+  200: #85cd9d,
+  300: #54b976,
+  400: #2faa58,
+  500: #148445,
+  600: #127c3e,
+  700: #0e7136,
+  800: #0b672e,
+  900: #06541f,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+// Define custom palettes
+$custom-primary: mat.m2-define-palette($custom-primary-palette, 500);
+$custom-secondary: mat.m2-define-palette($custom-secondary-palette, 500);
+
+// Define the custom theme
+$custom-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $custom-primary,
+      accent: $custom-secondary,
+      warn: mat.m2-define-palette(mat.$m2-red-palette),
+    ),
+  )
+);
+
+// Apply the theme
+@include mat.all-component-themes($custom-theme);

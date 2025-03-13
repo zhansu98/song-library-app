@@ -1,10 +1,7 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Song } from '../../models/song';
-
-export interface addSongDialogData {
-  song: Song;
-}
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-song-dialog',
@@ -13,19 +10,31 @@ export interface addSongDialogData {
   standalone: false,
 })
 export class AddEditSongDialogComponent {
-  songTitle: string;
-  songArtist: string;
-  songReleaseDate: Date;
-  songPrice: number;
+  songForm: FormGroup;
+
   constructor(
     public dialogRef: MatDialogRef<AddEditSongDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { title: string; message: string; song: Song }
+    public data: { title: string; message: string; song: Song },
+    private fb: FormBuilder // Inject FormBuilder
   ) {
-    this.songTitle = this.data.song.title;
-    this.songArtist = this.data.song.artist;
-    this.songReleaseDate = this.data.song.releaseDate;
-    this.songPrice = this.data.song.price;
+    this.songForm = this.fb.group({
+      songTitle: ['', Validators.required],
+      songArtist: ['', Validators.required],
+      songReleaseDate: [null, Validators.required],
+      songPrice: [0, [Validators.required, Validators.min(0)]],
+    });
+  }
+
+  ngOnInit(): void {
+    if (this.data.song) {
+      this.songForm.patchValue({
+        songTitle: this.data.song.title,
+        songArtist: this.data.song.artist,
+        songReleaseDate: this.data.song.releaseDate,
+        songPrice: this.data.song.price,
+      });
+    }
   }
 
   onCancel(): void {
@@ -33,13 +42,15 @@ export class AddEditSongDialogComponent {
   }
 
   onSubmit(): void {
-    const updatedSong: Song = {
-      id: this.data.song.id,
-      title: this.songTitle,
-      artist: this.songArtist,
-      releaseDate: this.songReleaseDate,
-      price: this.songPrice,
-    };
-    this.dialogRef.close(updatedSong);
+    if (this.songForm.valid) {
+      const updatedSong: Song = {
+        id: this.data.song.id,
+        title: this.songForm.value.songTitle,
+        artist: this.songForm.value.songArtist,
+        releaseDate: this.songForm.value.songReleaseDate,
+        price: this.songForm.value.songPrice,
+      };
+      this.dialogRef.close(updatedSong);
+    }
   }
 }
