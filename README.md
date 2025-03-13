@@ -71,3 +71,4 @@ scheme from the www.copera.org website.**
 # Future features to implement
 - Packaging up the frontend and backend into one executable file for ease of running
 - Possibly downgrading language versions to ones that are more widely used
+- Incorporate more color scheming (adding color to confirmation and error pop ups)

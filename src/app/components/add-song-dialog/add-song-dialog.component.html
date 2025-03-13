@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{this.data.title || 'Input Song'}}</h2>
 <mat-dialog-content>
-  <p>{{this.data.message}} || ''</p>
+  <p>{{this.data.message || ''}}</p>
   <form [formGroup]="songForm">
     <mat-form-field>
       <mat-label>Song Title</mat-label>
