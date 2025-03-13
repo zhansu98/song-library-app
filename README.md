@@ -70,3 +70,7 @@ Your solution should include tests when appropriate.
     - Functions    : 84.44% ( 38/45 )
     - Lines        : 85.85% ( 85/99 )
 - Testing prioritized the biggest component with the most logic inside.
+
+- Future Considerations (some future features to implement):
+    - Packaging up the frontend and backend into one executable file for ease of running
+    - Possibly downgrading language versions to ones that are more widely used
