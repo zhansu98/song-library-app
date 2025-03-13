@@ -19,6 +19,7 @@
 - Developed in Angular 19.2.2
 - Clone source code, ```npm install```, then ```ng serve```.
 - Navigate to localhost:4200 to see homepage.
+- Frontend should already be configured to run on a proxy to prevent CORS issues, but if CORS issue should occur, run with ```ng serve --proxy-config proxy.conf.json```
 
 
 # Addressing Project Requirements
