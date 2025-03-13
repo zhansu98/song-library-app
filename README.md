@@ -1,9 +1,9 @@
 Repositories:
-Frontend: https://github.com/zhansu98/song-library-app
-Backend: https://github.com/zhansu98/song-library-backend
+- Frontend: https://github.com/zhansu98/song-library-app
+- Backend: https://github.com/zhansu98/song-library-backend
 
 To run the project:
-Backend (Should be running first before the frontend):
+- Backend (Should be running first before the frontend):
     - Built in Java 23 and is a simple h2 database with a basic java spring boot service for communication
     - Download the source code from repo
     - Open with IDE and run mvn spring-boot:run in IDE terminal
@@ -12,7 +12,7 @@ Backend (Should be running first before the frontend):
     - Then from terminal you can run java -jar target/backend-0.0.1-SNAPSHOT.jar
     - Note the name of the jar may be different so be sure to check the name in the target folder once created
 
-Frontend:
+- Frontend:
     - Developed in Angular 19.2.2
     - Download the source code and run with ng serve in terminal or IDE terminal
     - This should run the application on localhost:4200
